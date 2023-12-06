@@ -19,36 +19,37 @@ class QaRecallsFilesManager:
 
         # Login level: (Y / Z) * 100
         qa_score_percentage_login_level = round((merged_df_Latam_recalls_compiled['Associate Pts Achieved'] /
-                                                 merged_df_Latam_recalls_compiled['Associate Max Achieved']) * 100, 2)
+                                                 merged_df_Latam_recalls_compiled['Associate Max Achieved']) * 100, 2).fillna(0).astype(float)
 
         # DPMO: (1 - QA Score%) * 10^6
         dpmo = round((1 - qa_score_percentage_login_level / 100) * 1000000)
 
         # Columns from compiled> (BI)
-        tp_asins = merged_df_Latam_recalls_compiled['Yanked']
+        tp_asins = merged_df_Latam_recalls_compiled['Yanked'].fillna(0).astype(int)
 
         # column BK
-        false_positive_asins = merged_df_Latam_recalls_compiled['Associate Level Overpulls']
+        false_positive_asins = merged_df_Latam_recalls_compiled['Associate Level Overpulls'].fillna(0).astype(int)
 
         # column BJ
-        false_negative_asins = merged_df_Latam_recalls_compiled['Associate Level Underpulls']
+        false_negative_asins = merged_df_Latam_recalls_compiled['Associate Level Underpulls'].fillna(0).astype(int)
 
         # Audit Sample = True Positive ASINs + False Positive ASINs (BI + BK)
-        audit_sample = tp_asins + false_positive_asins
+        audit_sample = (tp_asins + false_positive_asins).fillna(0).astype(int)
 
         # False Positive Rate (Percentage of Over-pulled ASINs): False Positive ASINs / Audit Sample
-        false_positive_rate = (false_positive_asins / audit_sample) * 100
+        false_positive_rate = ((false_positive_asins / audit_sample) * 100).fillna(0).astype(float)
 
         # False Negative Rate (Percentage of Under-pulled ASINs): False Negative ASINs / ( Audit Sample - FP + FN )
-        false_negative_rate = (false_negative_asins / (
-                    audit_sample - false_positive_asins + false_negative_asins)) * 100
+        false_negative_rate = ((false_negative_asins / (
+                    audit_sample - false_positive_asins + false_negative_asins)) * 100).fillna(0).astype(float)
 
         # FP DPMO: { 100- [ 100% - ( FP / Audit sample ) % ] } * 1000000 in percentage
-        fp_dpmo = (100 - (100 - (false_positive_asins / audit_sample))) * 1000000
+        fp_dpmo = ((100 - (100 - (false_positive_asins / audit_sample))) * 1000000).fillna(0).astype(int)
 
         # FN DPMO: { 100- [ 100% - ( FN / Audit sample - FP + FN ) % ] } * 1000000, in which:
-        fn_dpmo = (100 - (
-                100 - (false_negative_asins / (audit_sample - false_positive_asins + false_negative_asins)))) * 1000000
+        fn_dpmo = ((100 - (
+                100 - (false_negative_asins / (audit_sample - false_positive_asins + false_negative_asins)))) * 1000000).fillna(
+            0).astype(int)
 
         # -------------Deffect summary visualization ----------------
         specialist_tt_level = merged_df_Latam_recalls_compiled['Specialist_x']  # Associate: column M
@@ -112,36 +113,36 @@ class QaRecallsFilesManager:
         # Login
         # level: (N / O)
         qa_score_percentage_login_level = round((merged_df_mw_compiled['Associate Pts Achieved'] /
-                                                 merged_df_mw_compiled['Associate Max Achieved']) * 100, 2)
+                                                 merged_df_mw_compiled['Associate Max Achieved']) * 100, 2).fillna(0).astype(float)
 
         # DPMO: (1-QA Score%)*10^6
         dpmo = round((1 - qa_score_percentage_login_level / 100) * 1000000)
 
         # Columns from compiled> (AJ)
-        tp_asins = merged_df_mw_compiled['Yanked']
+        tp_asins = merged_df_mw_compiled['Yanked'].fillna(0).astype(int)
 
         # FP: column AL
-        false_positive_asins = merged_df_mw_compiled['Associate Level Overpulls']
+        false_positive_asins = merged_df_mw_compiled['Associate Level Overpulls'].fillna(0).astype(int)
 
         # FN: column AK
-        false_negative_asins = merged_df_mw_compiled['Associate Level Underpulls']
+        false_negative_asins = merged_df_mw_compiled['Associate Level Underpulls'].fillna(0).astype(int)
 
         # True Positive ASINs + False Positive ASINs (AJ + AL)
-        audit_sample = tp_asins + false_positive_asins
+        audit_sample = (tp_asins + false_positive_asins).fillna(0).astype(int)
 
         # False Positive Rate (Percentage of Over-pulled ASINs): False Positive ASINs / Audit Sample
-        false_positive_rate = (false_positive_asins / audit_sample) * 100
+        false_positive_rate = ((false_positive_asins / audit_sample) * 100).fillna(0).astype(float)
 
         # False Negative Rate (Percentage of Under-pulled ASINs): False Negative ASINs / ( Audit Sample - FP + FN )
-        false_negative_rate = (false_negative_asins / (
-                    audit_sample - false_positive_asins + false_negative_asins)) * 100
+        false_negative_rate = ((false_negative_asins / (
+                    audit_sample - false_positive_asins + false_negative_asins)) * 100).fillna(0).astype(float)
 
         # FP DPMO: { 1- [ 100% - ( FP / Audit sample ) % ] } * 1000000 in percentage
-        fp_dpmo = (100 - (100 - (false_positive_asins / audit_sample))) * 1000000
+        fp_dpmo = ((100 - (100 - (false_positive_asins / audit_sample))) * 1000000).fillna(0).astype(int)
 
         # FN DPMO: { 1- [ 100% - ( FN / Audit sample - FP + FN ) % ] } * 1000000, in which:
-        fn_dpmo = (100 - (
-                100 - (false_negative_asins / (audit_sample - false_positive_asins + false_negative_asins)))) * 1000000
+        fn_dpmo = ((100 - (
+                100 - (false_negative_asins / (audit_sample - false_positive_asins + false_negative_asins)))) * 1000000).fillna(0).astype(int)
 
         # -------------Deffect summary visualization ----------------
 
@@ -223,36 +224,36 @@ class QaRecallsFilesManager:
         # Login
         # level: (AA / AB)
         qa_score_percentage_login_level = round((merged_df_global_latam['Associate Pts Achieved'] /
-                                                 merged_df_global_latam['Associate Max Achieved']) * 100, 2)
+                                                 merged_df_global_latam['Associate Max Achieved']) * 100, 2).fillna(0).astype(int)
 
         # DPMO: (1-QA Score%)*10^6
         dpmo = round((1 - qa_score_percentage_login_level / 100) * 1000000)
 
         # Columns from compiled> (AG)
-        tp_asins = merged_df_global_latam['Yanked']
+        tp_asins = merged_df_global_latam['Yanked'].fillna(0).astype(int)
 
         # FP: column AI
-        false_positive_asins = merged_df_global_latam['Associate Level Overpulls']
+        false_positive_asins = merged_df_global_latam['Associate Level Overpulls'].fillna(0).astype(int)
 
         # FN: column AH
-        false_negative_asins = merged_df_global_latam['Associate Level Underpulls']
+        false_negative_asins = merged_df_global_latam['Associate Level Underpulls'].fillna(0).astype(int)
 
         # True Positive ASINs + False Positive ASINs (AG + AI)
-        audit_sample = tp_asins + false_positive_asins
+        audit_sample = (tp_asins + false_positive_asins).fillna(0).astype(int)
 
         # False Positive Rate (Percentage of Over-pulled ASINs): False Positive ASINs / Audit Sample
-        false_positive_rate = (false_positive_asins / audit_sample) * 100
+        false_positive_rate = ((false_positive_asins / audit_sample) * 100).fillna(0).astype(float)
 
         # False Negative Rate (Percentage of Under-pulled ASINs): False Negative ASINs / ( Audit Sample - FP + FN )
-        false_negative_rate = (false_negative_asins / (
-                    audit_sample - false_positive_asins + false_negative_asins)) * 100
+        false_negative_rate = ((false_negative_asins / (
+                    audit_sample - false_positive_asins + false_negative_asins)) * 100).fillna(0).astype(float)
 
         # FP DPMO: { 1- [ 100% - ( FP / Audit sample ) % ] } * 1000000 in percentage
-        fp_dpmo = (100 - (100 - (false_positive_asins / audit_sample))) * 1000000
+        fp_dpmo = ((100 - (100 - (false_positive_asins / audit_sample))) * 1000000).fillna(0).astype(int)
 
         # FN DPMO: { 1- [ 100% - ( FN / Audit sample ) % ] } * 1000000 in percentage
-        fn_dpmo = (100 - (
-                100 - (false_negative_asins / (audit_sample - false_positive_asins + false_negative_asins)))) * 1000000
+        fn_dpmo = ((100 - (
+                100 - (false_negative_asins / (audit_sample - false_positive_asins + false_negative_asins)))) * 1000000).fillna(0).astype(int)
 
         # -------------Deffect summary visualization ----------------
 
@@ -333,7 +334,7 @@ class QaRecallsFilesManager:
         # Login
         # level: (O / P)
         qa_score_percentage_login_level = round((merged_df_na_latam_non_act['Associate Pts Achieved'] /
-                                                 merged_df_na_latam_non_act['Associate Max Achieved']) * 100, 2)
+                                                 merged_df_na_latam_non_act['Associate Max Achieved']) * 100, 2).fillna(0).astype(float)
 
         # DPMO: (1-QA Score%)*10^6
         dpmo = round((1 - qa_score_percentage_login_level / 100) * 1000000)
@@ -373,14 +374,14 @@ class QaRecallsFilesManager:
                                                            'Specialist_TT_Level': associate_na_latam_non_act_tt_level,
                                                            'QA Score %': qa_score_percentage_login_level,
                                                            'DPMO': dpmo,
-                                                           'TP ASINs': None,
-                                                           'False Positive ASINs': None,
-                                                           'False Negative ASINs': None,
-                                                           'Audit Sample': None,
-                                                           'False Positive Rate': None,
-                                                           'False Negative Rate': None,
-                                                           'FP DPMO': None,
-                                                           'FN DPMO': None,
+                                                           'TP ASINs': 0,
+                                                           'False Positive ASINs': 0,
+                                                           'False Negative ASINs': 0,
+                                                           'Audit Sample': 0,
+                                                           'False Positive Rate': 0.0,
+                                                           'False Negative Rate': 0.0,
+                                                           'FP DPMO': 0,
+                                                           'FN DPMO': 0,
                                                            'Year': year,
                                                            'Week Completed': week,
                                                            'Date Assigned': date_assigned,
@@ -423,36 +424,36 @@ class QaRecallsFilesManager:
         # level:  (X / Y)
         qa_score_percentage_login_level = round(
             (merged_df_na_private_brands_recalls_mw_compiled['Associate Pts Achieved'] /
-             merged_df_na_private_brands_recalls_mw_compiled['Associate Max Achieved']) * 100, 2)
+             merged_df_na_private_brands_recalls_mw_compiled['Associate Max Achieved']) * 100, 2).fillna(0).astype(int)
 
         # DPMO: (1-QA Score%)*10^6
         dpmo = round((1 - qa_score_percentage_login_level / 100) * 1000000)
 
         # Columns from compiled> (AD)
-        tp_asins = merged_df_na_private_brands_recalls_mw_compiled['Yanked']
+        tp_asins = merged_df_na_private_brands_recalls_mw_compiled['Yanked'].fillna(0).astype(int)
 
         # FP: column AG
-        false_positive_asins = merged_df_na_private_brands_recalls_mw_compiled['Associate Level Overpulls']
+        false_positive_asins = merged_df_na_private_brands_recalls_mw_compiled['Associate Level Overpulls'].fillna(0).astype(int)
 
         # FN: column AF
-        false_negative_asins = merged_df_na_private_brands_recalls_mw_compiled['Associate Level Underpulls']
+        false_negative_asins = merged_df_na_private_brands_recalls_mw_compiled['Associate Level Underpulls'].fillna(0).astype(int)
 
         # True Positive ASINs + False Positive ASINs (AG + AI)
-        audit_sample = tp_asins + false_positive_asins
+        audit_sample = (tp_asins + false_positive_asins).fillna(0).astype(int)
 
         # False Positive Rate (Percentage of Over-pulled ASINs): False Positive ASINs / Audit Sample
-        false_positive_rate = (false_positive_asins / audit_sample) * 100
+        false_positive_rate = ((false_positive_asins / audit_sample) * 100).fillna(0).astype(float)
 
         # False Negative Rate (Percentage of Under-pulled ASINs): False Negative ASINs / ( Audit Sample - FP + FN )
-        false_negative_rate = (false_negative_asins / (
-                    audit_sample - false_positive_asins + false_negative_asins)) * 100
+        false_negative_rate = ((false_negative_asins / (
+                    audit_sample - false_positive_asins + false_negative_asins)) * 100).fillna(0).astype(float)
 
         # FP DPMO: { 1- [ 100% - ( FP / Audit sample ) % ] } * 1000000 in percentage
-        fp_dpmo = (100 - (100 - (false_positive_asins / audit_sample))) * 1000000
+        fp_dpmo = ((100 - (100 - (false_positive_asins / audit_sample))) * 1000000).fillna(0).astype(int)
 
         # FN DPMO: { 1- [ 100% - ( FN / Audit sample ) % ] } * 1000000 in percentage
-        fn_dpmo = (100 - (
-                100 - (false_negative_asins / (audit_sample - false_positive_asins + false_negative_asins)))) * 1000000
+        fn_dpmo = ((100 - (
+                100 - (false_negative_asins / (audit_sample - false_positive_asins + false_negative_asins)))) * 1000000).fillna(0).astype(int)
 
         # -------------Deffect summary visualization ----------------
 
