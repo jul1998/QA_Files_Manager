@@ -2,8 +2,10 @@
 from clean_upload_data import *
 from get_sharepoint_files import get_username, get_sharepoint_folder, preprocess_files
 from qa_recalls_functions import QaRecallsFilesManager
+from clean_upload_data import concat_df
 from dotenv import load_dotenv
 import os
+import pandas as pd
 
 load_dotenv() # Load environment variables
 
@@ -23,15 +25,15 @@ folder = get_sharepoint_folder(username, password, site_url)
 
 all_dataframes = preprocess_files(folder)
 
-global_recalls_compiled_NA_tt_level = all_dataframes['Global Recalls Compiled File NA_TT Level']
+#global_recalls_compiled_NA_tt_level = all_dataframes['Global Recalls Compiled File NA_TT Level']
 
 
 NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level = all_dataframes['NA Private Brands Recalls and Market Withdrawals compiled file_TT Level']
 NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause = all_dataframes['NA Private Brands Recalls and Market Withdrawals compiled file_Raw Data Errors & Root Cause']
 
-NA_Recalls_Compiled_File_TT_Level = all_dataframes['NA Recalls Compiled File_TT Level']
-NA_Recalls_Compiled_File_ASIN_Level = all_dataframes['NA Recalls Compiled File_ASIN Level']
-NA_Recalls_Compiled_File_Raw_Data_Errors_Root_Cause = all_dataframes['NA Recalls Compiled File_Raw Data Errors & Root Cause']
+# NA_Recalls_Compiled_File_TT_Level = all_dataframes['NA Recalls Compiled File_TT Level']
+# NA_Recalls_Compiled_File_ASIN_Level = all_dataframes['NA Recalls Compiled File_ASIN Level']
+# NA_Recalls_Compiled_File_Raw_Data_Errors_Root_Cause = all_dataframes['NA Recalls Compiled File_Raw Data Errors & Root Cause']
 
 MW_Compiled_File_MW_Data = all_dataframes['MW Compiled File_MW Data']
 MW_Compiled_File_Raw_Data_Errors_Root_Cause = all_dataframes['MW Compiled File_Raw Data Errors & Root Cause']
@@ -110,6 +112,14 @@ try:
         calcs_for_na_private_brands_recalls_mw(NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level,
                                                NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause)
 
+    # Union all dataframes into one
+    union_all_dataframes = pd.concat([latam_recalls_compiled_calculated_values, mw_compiled_calculated_values,
+                                        global_latam_calculated_values, na_latam_non_act_calculated_values,
+                                        na_private_brands_recalls_mw_compiled_calculated_values], ignore_index=True)
+
+
+
+
 
 except Exception as e:
     print('Error in Calculations:', e)
@@ -123,6 +133,7 @@ else:
     save_csv_file(na_latam_non_act_calculated_values, results_path, 'NA_LATAM_Non_Actionable_Recalls_Compiled_File_Calculated_Values')
     save_csv_file(na_private_brands_recalls_mw_compiled_calculated_values, results_path,
                   'NA_Private_Brands_Recalls_MW_Compiled_File_Calculated_Values')
+    save_csv_file(union_all_dataframes, results_path, 'Union_All_QA_Recalls_Files_calculations')
 
     # Upload to s3 bucket
     upload_to_s3(bucket, results_path + 'LATAM_Recalls_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'LATAM_Recalls_Compiled_File_Calculated_Values.csv')
@@ -130,5 +141,6 @@ else:
     upload_to_s3(bucket, results_path + 'Global_Recalls_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'Global_Recalls_Compiled_File_Calculated_Values.csv')
     upload_to_s3(bucket, results_path + 'NA_LATAM_Non_Actionable_Recalls_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'NA_LATAM_Non_Actionable_Recalls_Compiled_File_Calculated_Values.csv')
     upload_to_s3(bucket, results_path + 'NA_Private_Brands_Recalls_MW_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'NA_Private_Brands_Recalls_MW_Compiled_File_Calculated_Values.csv')
+    upload_to_s3(bucket, results_path + 'Union_All_QA_Recalls_Files_calculations.csv', bucket_destionation_path + 'Union_All_QA_Recalls_Files_calculations.csv')
 
 

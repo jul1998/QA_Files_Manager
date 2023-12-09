@@ -1,5 +1,5 @@
 import pandas as pd
-
+from clean_upload_data import replace_commas_with_semicolon
 
 class QaRecallsFilesManager:
 
@@ -16,6 +16,9 @@ class QaRecallsFilesManager:
             how='left',
             on='TT URL'
         )
+
+        # Replace commas by semmincolons in dataframe
+        merged_df_Latam_recalls_compiled = replace_commas_with_semicolon(merged_df_Latam_recalls_compiled)
 
         # Login level: (Y / Z) * 100
         qa_score_percentage_login_level = round((merged_df_Latam_recalls_compiled['Associate Pts Achieved'] /
@@ -52,21 +55,21 @@ class QaRecallsFilesManager:
             0).astype(int)
 
         # -------------Deffect summary visualization ----------------
-        specialist_tt_level = merged_df_Latam_recalls_compiled['Specialist_x']  # Associate: column M
+        specialist_tt_level = merged_df_Latam_recalls_compiled['Specialist_x'].fillna("NA")  # Associate: column M
         # specialist_raw_data_errors = LATAM_Recalls_Compiled_File_Raw_Data_Errors_Root_Cause['Specialist'] # Raw Data Errors: column E
-        year = merged_df_Latam_recalls_compiled['Year']  # Year: column B
-        marketplace_tt_level = merged_df_Latam_recalls_compiled['MP_x']  # Marketplace: column I
-        week = merged_df_Latam_recalls_compiled['Completed Week_x']  # Week: column D
-        date_assigned = pd.to_datetime(merged_df_Latam_recalls_compiled['Date Assigned'])  # Date Assigned: column F
+        year = merged_df_Latam_recalls_compiled['Year'].fillna(pd.NaT)  # Year: column B
+        marketplace_tt_level = merged_df_Latam_recalls_compiled['MP_x'].fillna("NA")  # Marketplace: column I
+        week = merged_df_Latam_recalls_compiled['Completed Week_x'].fillna(pd.NaT)  # Week: column D
+        date_assigned = pd.to_datetime(merged_df_Latam_recalls_compiled['Date Assigned']).fillna(pd.to_datetime('1900-01-01'))  # Date Assigned: column F
         date_completed = pd.to_datetime(
-            merged_df_Latam_recalls_compiled['Date Completed_x'])  # Date Completed: column G
-        tt_URL_tt_level = merged_df_Latam_recalls_compiled['TT URL']  # TT Link: column K
-        error_type = merged_df_Latam_recalls_compiled['Type of Error']  # Error Type: column CI
-        feedback = merged_df_Latam_recalls_compiled['Feedback']  # Feedback: column CJ
-        qc_parameter_error = merged_df_Latam_recalls_compiled['QC Parameter Error']  # QC Parameter Error: column CG
-        primary_rc = merged_df_Latam_recalls_compiled['ROOT CAUSE PRIMARY']  # Primary RC: column CJ
-        secondary_rc = merged_df_Latam_recalls_compiled['ROOT CAUSE SECONDARY']  # Secondary RC: column CK
-        tertiary_rc = merged_df_Latam_recalls_compiled['ROOT CAUSE TERTIARY']  # Tertiary RC: column CL
+            merged_df_Latam_recalls_compiled['Date Completed_x']).fillna(pd.to_datetime('1900-01-01'))  # Date Completed: column G
+        tt_URL_tt_level = merged_df_Latam_recalls_compiled['TT URL'].fillna("NA")  # TT Link: column K
+        error_type = merged_df_Latam_recalls_compiled['Type of Error'].fillna("NA")  # Error Type: column CI
+        feedback = merged_df_Latam_recalls_compiled['Feedback'].fillna("NA")  # Feedback: column CJ
+        qc_parameter_error = merged_df_Latam_recalls_compiled['QC Parameter Error'].fillna("NA")  # QC Parameter Error: column CG
+        primary_rc = merged_df_Latam_recalls_compiled['ROOT CAUSE PRIMARY'].fillna("NA")  # Primary RC: column CJ
+        secondary_rc = merged_df_Latam_recalls_compiled['ROOT CAUSE SECONDARY'].fillna("NA")  # Secondary RC: column CK
+        tertiary_rc = merged_df_Latam_recalls_compiled['ROOT CAUSE TERTIARY'].fillna("NA")  # Tertiary RC: column CL
 
         # Create dataframe
         latam_recalls_compiled_calculated_values = pd.DataFrame({'Source': 'LATAM_Recalls_Compiled_File',
@@ -108,6 +111,9 @@ class QaRecallsFilesManager:
             how='left',
             on='TT URL'
         )
+
+        # Replace commas by semmincolons in dataframe
+        merged_df_mw_compiled = replace_commas_with_semicolon(merged_df_mw_compiled)
 
         # QA Score %: Total points achieved / Total Max Points
         # Login
@@ -163,17 +169,17 @@ class QaRecallsFilesManager:
         Secondary RC: column N
         Tertiary RC: column O
         """
-        tt_url_mw_data = merged_df_mw_compiled['TT URL']
-        speacialist_mw_data = merged_df_mw_compiled['Specialist_x']
-        year = merged_df_mw_compiled['Year']
-        week = merged_df_mw_compiled['Completed Week_x']
-        date_assigned = pd.to_datetime(merged_df_mw_compiled['Date Assigned'])
-        date_completed = pd.to_datetime(merged_df_mw_compiled['Date Completed_x'])
-        error_type = merged_df_mw_compiled['Type of Error']
-        feedback = merged_df_mw_compiled['Feedback']
-        marketplace = merged_df_mw_compiled['MP_x']
-        qc_parameter_error = merged_df_mw_compiled['QC Parameter Error']
-        primary_rc = merged_df_mw_compiled['ROOT CAUSE PRIMARY']
+        tt_url_mw_data = merged_df_mw_compiled['TT URL'].fillna("NA")
+        speacialist_mw_data = merged_df_mw_compiled['Specialist_x'].fillna("NA")
+        year = merged_df_mw_compiled['Year'].fillna(pd.NaT)
+        week = merged_df_mw_compiled['Completed Week_x'].fillna(pd.NaT)
+        date_assigned = pd.to_datetime(merged_df_mw_compiled['Date Assigned']).fillna(pd.to_datetime('1900-01-01'))
+        date_completed = pd.to_datetime(merged_df_mw_compiled['Date Completed_x']).fillna(pd.to_datetime('1900-01-01'))
+        error_type = merged_df_mw_compiled['Type of Error'].fillna("NA")
+        feedback = merged_df_mw_compiled['Feedback'].fillna("NA")
+        marketplace = merged_df_mw_compiled['MP_x'].fillna("NA")
+        qc_parameter_error = merged_df_mw_compiled['QC Parameter Error'].fillna("NA")
+        primary_rc = merged_df_mw_compiled['ROOT CAUSE PRIMARY'].fillna("NA")
         # secondary_rc = MW_Compiled_File_Raw_Data_Errors_Root_Cause['ROOT CAUSE SECONDARY']  # These two cols do not exist in file
         # tertiary_rc = MW_Compiled_File_Raw_Data_Errors_Root_Cause['ROOT CAUSE TERTIARY']
 
@@ -200,8 +206,8 @@ class QaRecallsFilesManager:
                                                       'Marketplace': marketplace,
                                                       'QC Parameter Error': qc_parameter_error,
                                                       'Primary RC': primary_rc,
-                                                      'Secondary RC': None,
-                                                      'Tertiary RC': None
+                                                      'Secondary RC': "NA",
+                                                      'Tertiary RC': "NA"
                                                       })
 
         # print(mw_compiled_calculated_values.head(), mw_compiled_calculated_values.shape)
@@ -219,6 +225,9 @@ class QaRecallsFilesManager:
             how='left',
             on='TT URL',
         )
+
+        # Replace commas by semmincolons in dataframe
+        merged_df_global_latam = replace_commas_with_semicolon(merged_df_global_latam)
 
         # QA Score %: Total points achieved / Total Max Points
         # Login
@@ -271,19 +280,19 @@ class QaRecallsFilesManager:
         Tertiary RC: column O
         """
 
-        tt_url_global_latam_tt_url = merged_df_global_latam['TT URL']
-        specialist_global_latam_tt_url = merged_df_global_latam['Specialist_x']
-        year = merged_df_global_latam['Year']
-        week = merged_df_global_latam['Completed Week_x']
-        date_assigned = pd.to_datetime(merged_df_global_latam['Date Assigned'])
-        date_completed = pd.to_datetime(merged_df_global_latam['Date Completed_x'])
-        error_type = merged_df_global_latam['Type of Error']
-        feedback = merged_df_global_latam['Feedback']
-        marketplace = merged_df_global_latam['MP_x']
-        qc_parameter_error = merged_df_global_latam['QC Parameter Error']
-        primary_rc = merged_df_global_latam['ROOT CAUSE PRIMARY']
-        secondary_rc = merged_df_global_latam['ROOT CAUSE SECONDARY']  # These two cols do not exist in file
-        tertiary_rc = merged_df_global_latam['ROOT CAUSE TERTIARY']
+        tt_url_global_latam_tt_url = merged_df_global_latam['TT URL'].fillna("NA")
+        specialist_global_latam_tt_url = merged_df_global_latam['Specialist_x'].fillna("NA")
+        year = merged_df_global_latam['Year'].fillna(pd.NaT)
+        week = merged_df_global_latam['Completed Week_x'].fillna(pd.NaT)
+        date_assigned = pd.to_datetime(merged_df_global_latam['Date Assigned']).fillna(pd.to_datetime('1900-01-01'))
+        date_completed = pd.to_datetime(merged_df_global_latam['Date Completed_x']).fillna(pd.to_datetime('1900-01-01'))
+        error_type = merged_df_global_latam['Type of Error'].fillna("NA")
+        feedback = merged_df_global_latam['Feedback'].fillna("NA")
+        marketplace = merged_df_global_latam['MP_x'].fillna("NA")
+        qc_parameter_error = merged_df_global_latam['QC Parameter Error'].fillna("NA")
+        primary_rc = merged_df_global_latam['ROOT CAUSE PRIMARY'].fillna("NA")
+        secondary_rc = merged_df_global_latam['ROOT CAUSE SECONDARY'].fillna("NA")  # These two cols do not exist in file
+        tertiary_rc = merged_df_global_latam['ROOT CAUSE TERTIARY'].fillna("NA")
 
         # Create dataframe
 
@@ -330,6 +339,10 @@ class QaRecallsFilesManager:
             on='TT URL'
         )
 
+        # Replace commas by semmincolons in dataframe
+        merged_df_na_latam_non_act = replace_commas_with_semicolon(merged_df_na_latam_non_act)
+
+
         # QA Score %: Total points achieved / Total Max Points
         # Login
         # level: (O / P)
@@ -353,19 +366,19 @@ class QaRecallsFilesManager:
         Tertiary RC: column N
         """
 
-        associate_na_latam_non_act_tt_level = merged_df_na_latam_non_act['Specialist_x']
-        tt_url_na_latam_non_act_tt_level = merged_df_na_latam_non_act['TT URL']
-        year = merged_df_na_latam_non_act['Year']
-        week = merged_df_na_latam_non_act['Completed Week_x']
-        date_assigned = pd.to_datetime(merged_df_na_latam_non_act['Date Assigned'])
-        date_completed = pd.to_datetime(merged_df_na_latam_non_act['Date Completed_x'])
-        error_type = merged_df_na_latam_non_act['Type of Error']
-        feedback = merged_df_na_latam_non_act['Feedback']
-        marketplace = merged_df_na_latam_non_act['MP_x']
-        qc_parameter_error = merged_df_na_latam_non_act['QC Parameter Error']
-        primary_rc = merged_df_na_latam_non_act['ROOT CAUSE PRIMARY']
-        secondary_rc = merged_df_na_latam_non_act['ROOT CAUSE SECONDARY']
-        tertiary_rc = merged_df_na_latam_non_act['ROOT CAUSE TERTIARY']
+        associate_na_latam_non_act_tt_level = merged_df_na_latam_non_act['Specialist_x'].fillna("NA")
+        tt_url_na_latam_non_act_tt_level = merged_df_na_latam_non_act['TT URL'].fillna("NA")
+        year = merged_df_na_latam_non_act['Year'].fillna(pd.NaT)
+        week = merged_df_na_latam_non_act['Completed Week_x'].fillna(pd.NaT)
+        date_assigned = pd.to_datetime(merged_df_na_latam_non_act['Date Assigned']).fillna(pd.to_datetime('1900-01-01'))
+        date_completed = pd.to_datetime(merged_df_na_latam_non_act['Date Completed_x']).fillna(pd.to_datetime('1900-01-01'))
+        error_type = merged_df_na_latam_non_act['Type of Error'].fillna("NA")
+        feedback = merged_df_na_latam_non_act['Feedback'].fillna("NA")
+        marketplace = merged_df_na_latam_non_act['MP_x'].fillna("NA")
+        qc_parameter_error = merged_df_na_latam_non_act['QC Parameter Error'].fillna("NA")
+        primary_rc = merged_df_na_latam_non_act['ROOT CAUSE PRIMARY'].fillna("NA")
+        secondary_rc = merged_df_na_latam_non_act['ROOT CAUSE SECONDARY'].fillna("NA")
+        tertiary_rc = merged_df_na_latam_non_act['ROOT CAUSE TERTIARY'].fillna("NA")
 
         # Create dataframe
 
@@ -416,8 +429,12 @@ class QaRecallsFilesManager:
             on='TT URL'
         )
 
+
         # Reset NaN values to None
         merged_df_na_private_brands_recalls_mw_compiled['TT URL'].replace('NA', None, inplace=True)
+
+        # Replace commas by semmincolons in dataframe
+        merged_df_na_private_brands_recalls_mw_compiled = replace_commas_with_semicolon(merged_df_na_private_brands_recalls_mw_compiled)
 
         # QA Score %: Total points achieved / Total Max Points
         # Login
@@ -470,19 +487,19 @@ class QaRecallsFilesManager:
         """
 
         associate_na_private_brands_recalls_mw_tt_level = merged_df_na_private_brands_recalls_mw_compiled[
-            'Specialist_x']
-        tt_url_na_latam_non_act_tt_level = merged_df_na_private_brands_recalls_mw_compiled['TT URL']
-        year = merged_df_na_private_brands_recalls_mw_compiled['Year']
-        week = merged_df_na_private_brands_recalls_mw_compiled['Completed Week_x']
-        date_assigned = pd.to_datetime(merged_df_na_private_brands_recalls_mw_compiled['Date Assigned'])
-        date_completed = pd.to_datetime(merged_df_na_private_brands_recalls_mw_compiled['Date Completed_x'])
-        error_type = merged_df_na_private_brands_recalls_mw_compiled['Type of Error']
-        feedback = merged_df_na_private_brands_recalls_mw_compiled['Feedback']
-        marketplace = merged_df_na_private_brands_recalls_mw_compiled['MP_x']
-        qc_parameter_error = merged_df_na_private_brands_recalls_mw_compiled['QC Parameter Error']
-        primary_rc = merged_df_na_private_brands_recalls_mw_compiled['ROOT CAUSE PRIMARY']
-        secondary_rc = merged_df_na_private_brands_recalls_mw_compiled['ROOT CAUSE SECONDARY']
-        tertiary_rc = merged_df_na_private_brands_recalls_mw_compiled['ROOT CAUSE TERTIARY']
+            'Specialist_x'].fillna("NA")
+        tt_url_na_latam_non_act_tt_level = merged_df_na_private_brands_recalls_mw_compiled['TT URL'].fillna("NA")
+        year = merged_df_na_private_brands_recalls_mw_compiled['Year'].fillna(pd.NaT)
+        week = merged_df_na_private_brands_recalls_mw_compiled['Completed Week_x'].fillna(pd.NaT)
+        date_assigned = pd.to_datetime(merged_df_na_private_brands_recalls_mw_compiled['Date Assigned']).fillna(pd.to_datetime('1900-01-01'))
+        date_completed = pd.to_datetime(merged_df_na_private_brands_recalls_mw_compiled['Date Completed_x']).fillna(pd.to_datetime('1900-01-01'))
+        error_type = merged_df_na_private_brands_recalls_mw_compiled['Type of Error'].fillna("NA")
+        feedback = merged_df_na_private_brands_recalls_mw_compiled['Feedback'].fillna("NA")
+        marketplace = merged_df_na_private_brands_recalls_mw_compiled['MP_x'].fillna("NA")
+        qc_parameter_error = merged_df_na_private_brands_recalls_mw_compiled['QC Parameter Error'].fillna("NA")
+        primary_rc = merged_df_na_private_brands_recalls_mw_compiled['ROOT CAUSE PRIMARY'].fillna("NA")
+        secondary_rc = merged_df_na_private_brands_recalls_mw_compiled['ROOT CAUSE SECONDARY'].fillna("NA")
+        tertiary_rc = merged_df_na_private_brands_recalls_mw_compiled['ROOT CAUSE TERTIARY'].fillna("NA")
 
         # Create DataFrame
 
