@@ -17,6 +17,11 @@ class QaRecallsFilesManager:
             on='TT URL'
         )
 
+        # select data only where year is >= 2023
+        merged_df_Latam_recalls_compiled = merged_df_Latam_recalls_compiled[merged_df_Latam_recalls_compiled['Year'] >= 2023]
+
+
+
         # Replace commas by semmincolons in dataframe
         merged_df_Latam_recalls_compiled = replace_commas_with_semicolon(merged_df_Latam_recalls_compiled)
 
@@ -66,6 +71,7 @@ class QaRecallsFilesManager:
         tt_URL_tt_level = merged_df_Latam_recalls_compiled['TT URL'].fillna("NA")  # TT Link: column K
         error_type = merged_df_Latam_recalls_compiled['Type of Error'].fillna("NA")  # Error Type: column CI
         feedback = merged_df_Latam_recalls_compiled['Feedback'].fillna("NA")  # Feedback: column CJ
+        is_biased = merged_df_Latam_recalls_compiled['Unbiased/Biased_x'].fillna("NA")  # Is Biased: column E
         qc_parameter_error = merged_df_Latam_recalls_compiled['QC Parameter Error'].fillna("NA")  # QC Parameter Error: column CG
         primary_rc = merged_df_Latam_recalls_compiled['ROOT CAUSE PRIMARY'].fillna("NA")  # Primary RC: column CJ
         secondary_rc = merged_df_Latam_recalls_compiled['ROOT CAUSE SECONDARY'].fillna("NA")  # Secondary RC: column CK
@@ -91,6 +97,7 @@ class QaRecallsFilesManager:
                                                                  'Date Completed': date_completed,
                                                                  'Error Type': error_type,
                                                                  'Feedback': feedback,
+                                                                'Is_Biased': is_biased,
                                                                  'Marketplace': marketplace_tt_level,
                                                                  'QC Parameter Error': qc_parameter_error,
                                                                  'Primary RC': primary_rc,
@@ -111,6 +118,11 @@ class QaRecallsFilesManager:
             how='left',
             on='TT URL'
         )
+
+        # select data only where year is >= 2023
+        merged_df_mw_compiled = merged_df_mw_compiled[merged_df_mw_compiled['Year'] >= 2023]
+
+
 
         # Replace commas by semmincolons in dataframe
         merged_df_mw_compiled = replace_commas_with_semicolon(merged_df_mw_compiled)
@@ -203,6 +215,7 @@ class QaRecallsFilesManager:
                                                       'Date Completed': date_completed,
                                                       'Error Type': error_type,
                                                       'Feedback': feedback,
+                                                      'Is_Biased': "NA",
                                                       'Marketplace': marketplace,
                                                       'QC Parameter Error': qc_parameter_error,
                                                       'Primary RC': primary_rc,
@@ -216,7 +229,7 @@ class QaRecallsFilesManager:
     def calcs_for_global_latam(self, Global_Recalls_Compiled_File_LATAM_TT_Level,  Global_Recalls_Compiled_File_LATAM_Raw_Data_Errors_Root_Cause):
         """
         This function calculates the following metrics for LATAM_Recalls_Compiled_File_MW_Data:
-        :return: LATAM_Recalls_Compiled_File_MW_Data
+        :return: Global_Recalls_Compiled_File_LATAM_Calculated_Values
         """
 
         merged_df_global_latam = pd.merge(
@@ -225,6 +238,9 @@ class QaRecallsFilesManager:
             how='left',
             on='TT URL',
         )
+
+        # select data only where year is >= 2023
+        merged_df_global_latam = merged_df_global_latam[merged_df_global_latam['Year'] >= 2023]
 
         # Replace commas by semmincolons in dataframe
         merged_df_global_latam = replace_commas_with_semicolon(merged_df_global_latam)
@@ -288,6 +304,7 @@ class QaRecallsFilesManager:
         date_completed = pd.to_datetime(merged_df_global_latam['Date Completed_x']).fillna(pd.to_datetime('1900-01-01'))
         error_type = merged_df_global_latam['Type of Error'].fillna("NA")
         feedback = merged_df_global_latam['Feedback'].fillna("NA")
+        is_biased = merged_df_global_latam['Unbiased/Biased_x'].fillna("NA")
         marketplace = merged_df_global_latam['MP_x'].fillna("NA")
         qc_parameter_error = merged_df_global_latam['QC Parameter Error'].fillna("NA")
         primary_rc = merged_df_global_latam['ROOT CAUSE PRIMARY'].fillna("NA")
@@ -315,6 +332,7 @@ class QaRecallsFilesManager:
                                                        'Date Completed': date_completed,
                                                        'Error Type': error_type,
                                                        'Feedback': feedback,
+                                                         'Is_Biased': is_biased,
                                                        'Marketplace': marketplace,
                                                        'QC Parameter Error': qc_parameter_error,
                                                        'Primary RC': primary_rc,
@@ -338,6 +356,9 @@ class QaRecallsFilesManager:
             how='left',
             on='TT URL'
         )
+
+        # select data only where year is >= 2023
+        merged_df_na_latam_non_act = merged_df_na_latam_non_act[merged_df_na_latam_non_act['Year'] >= 2023]
 
         # Replace commas by semmincolons in dataframe
         merged_df_na_latam_non_act = replace_commas_with_semicolon(merged_df_na_latam_non_act)
@@ -401,6 +422,7 @@ class QaRecallsFilesManager:
                                                            'Date Completed': date_completed,
                                                            'Error Type': error_type,
                                                            'Feedback': feedback,
+                                                            'Is Biased': "NA",
                                                            'Marketplace': marketplace,
                                                            'QC Parameter Error': qc_parameter_error,
                                                            'Primary RC': primary_rc,
@@ -432,6 +454,10 @@ class QaRecallsFilesManager:
 
         # Reset NaN values to None
         merged_df_na_private_brands_recalls_mw_compiled['TT URL'].replace('NA', None, inplace=True)
+
+        # select data only where year is >= 2023
+        merged_df_na_private_brands_recalls_mw_compiled = merged_df_na_private_brands_recalls_mw_compiled[
+            merged_df_na_private_brands_recalls_mw_compiled['Year'] >= 2023]
 
         # Replace commas by semmincolons in dataframe
         merged_df_na_private_brands_recalls_mw_compiled = replace_commas_with_semicolon(merged_df_na_private_brands_recalls_mw_compiled)
@@ -523,6 +549,7 @@ class QaRecallsFilesManager:
              'Date Completed': date_completed,
              'Error Type': error_type,
              'Feedback': feedback,
+             'Is_Biased': "NA",
              'Marketplace': marketplace,
              'QC Parameter Error': qc_parameter_error,
              'Primary RC': primary_rc,
