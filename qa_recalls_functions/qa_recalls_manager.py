@@ -20,10 +20,9 @@ class QaRecallsFilesManager:
         # select data only where year is >= 2023
         merged_df_Latam_recalls_compiled = merged_df_Latam_recalls_compiled[merged_df_Latam_recalls_compiled['Year'] >= 2023]
 
-
-
         # Replace commas by semmincolons in dataframe
         merged_df_Latam_recalls_compiled = replace_commas_with_semicolon(merged_df_Latam_recalls_compiled)
+
 
         # Login level: (Y / Z) * 100
         qa_score_percentage_login_level = round((merged_df_Latam_recalls_compiled['Associate Pts Achieved'] /
@@ -76,6 +75,8 @@ class QaRecallsFilesManager:
         primary_rc = merged_df_Latam_recalls_compiled['ROOT CAUSE PRIMARY'].fillna("NA")  # Primary RC: column CJ
         secondary_rc = merged_df_Latam_recalls_compiled['ROOT CAUSE SECONDARY'].fillna("NA")  # Secondary RC: column CK
         tertiary_rc = merged_df_Latam_recalls_compiled['ROOT CAUSE TERTIARY'].fillna("NA")  # Tertiary RC: column CL
+        recalls_pts_achieved = merged_df_Latam_recalls_compiled['Recall Pts Achieved'].fillna(0).astype(int)  # Recall Pts Achieved: column CO
+        recalls_max_achieved = merged_df_Latam_recalls_compiled['Recall Max Achieved'].fillna(0).astype(int)  # Recall Max Achieved: column CP
 
         # Create dataframe
         latam_recalls_compiled_calculated_values = pd.DataFrame({'Source': 'LATAM_Recalls_Compiled_File',
@@ -91,6 +92,8 @@ class QaRecallsFilesManager:
                                                                  'False Negative Rate': false_negative_rate,
                                                                  'FP DPMO': fp_dpmo,
                                                                  'FN DPMO': fn_dpmo,
+                                                                 'Recalls_Pts_Achieved': recalls_pts_achieved,
+                                                                'Recalls_Max_Achieved': recalls_max_achieved,
                                                                  'Year': year,
                                                                  'Week Completed': week,
                                                                  'Date Assigned': date_assigned,
@@ -102,8 +105,8 @@ class QaRecallsFilesManager:
                                                                  'QC Parameter Error': qc_parameter_error,
                                                                  'Primary RC': primary_rc,
                                                                  'Secondary RC': secondary_rc,
-                                                                 'Tertiary RC': tertiary_rc
-                                                                 })
+                                                                 'Tertiary RC': tertiary_rc,
+                                                                    })
         return latam_recalls_compiled_calculated_values
 
     def calcs_for_MW_Compiled_File(self, MW_Compiled_File_MW_Data, MW_Compiled_File_Raw_Data_Errors_Root_Cause):
@@ -194,6 +197,8 @@ class QaRecallsFilesManager:
         primary_rc = merged_df_mw_compiled['ROOT CAUSE PRIMARY'].fillna("NA")
         # secondary_rc = MW_Compiled_File_Raw_Data_Errors_Root_Cause['ROOT CAUSE SECONDARY']  # These two cols do not exist in file
         # tertiary_rc = MW_Compiled_File_Raw_Data_Errors_Root_Cause['ROOT CAUSE TERTIARY']
+        recalls_pts_achieved = merged_df_mw_compiled['MW Pts Achieved'].fillna(0).astype(int)  # Recall Pts Achieved: column CO
+        recalls_max_achieved = merged_df_mw_compiled['MW Max Achieved'].fillna(0).astype(int)  # Recall Max Achieved: column CP
 
         # Create dataframe
         mw_compiled_calculated_values = pd.DataFrame({'Source': 'MW_Compiled_File',
@@ -209,6 +214,8 @@ class QaRecallsFilesManager:
                                                       'False Negative Rate': false_negative_rate,
                                                       'FP DPMO': fp_dpmo,
                                                       'FN DPMO': fn_dpmo,
+                                                        'Recalls_Pts_Achieved': recalls_pts_achieved,
+                                                        'Recalls_Max_Achieved': recalls_max_achieved,
                                                       'Year': year,
                                                       'Week Completed': week,
                                                       'Date Assigned': date_assigned,
@@ -310,6 +317,9 @@ class QaRecallsFilesManager:
         primary_rc = merged_df_global_latam['ROOT CAUSE PRIMARY'].fillna("NA")
         secondary_rc = merged_df_global_latam['ROOT CAUSE SECONDARY'].fillna("NA")  # These two cols do not exist in file
         tertiary_rc = merged_df_global_latam['ROOT CAUSE TERTIARY'].fillna("NA")
+        recalls_pts_achieved = merged_df_global_latam['Recall Pts Achieved'].fillna(0).astype(int)  # Recall Pts Achieved: column CO
+        recalls_max_achieved = merged_df_global_latam['Recall Max Achieved'].fillna(0).astype(int)  # Recall Max Achieved: column CP
+
 
         # Create dataframe
 
@@ -326,6 +336,8 @@ class QaRecallsFilesManager:
                                                        'False Negative Rate': false_negative_rate,
                                                        'FP DPMO': fp_dpmo,
                                                        'FN DPMO': fn_dpmo,
+                                                         'Recalls_Pts_Achieved': recalls_pts_achieved,
+                                                            'Recalls_Max_Achieved': recalls_max_achieved,
                                                        'Year': year,
                                                        'Week Completed': week,
                                                        'Date Assigned': date_assigned,
@@ -339,7 +351,6 @@ class QaRecallsFilesManager:
                                                        'Secondary RC': secondary_rc,
                                                        'Tertiary RC': tertiary_rc
                                                        })
-        # print(global_latam_calculated_values.head(), global_latam_calculated_values.shape)
 
         return global_latam_calculated_values
 
@@ -400,6 +411,9 @@ class QaRecallsFilesManager:
         primary_rc = merged_df_na_latam_non_act['ROOT CAUSE PRIMARY'].fillna("NA")
         secondary_rc = merged_df_na_latam_non_act['ROOT CAUSE SECONDARY'].fillna("NA")
         tertiary_rc = merged_df_na_latam_non_act['ROOT CAUSE TERTIARY'].fillna("NA")
+        recalls_pts_achieved = merged_df_na_latam_non_act['Recall Pts Achieved'].fillna(0).astype(int)  # Recall Pts Achieved: column CO
+        recalls_max_achieved = merged_df_na_latam_non_act['Recall Max Achieved'].fillna(0).astype(int)  # Recall Max Achieved: column CP
+
 
         # Create dataframe
 
@@ -416,13 +430,15 @@ class QaRecallsFilesManager:
                                                            'False Negative Rate': 0.0,
                                                            'FP DPMO': 0,
                                                            'FN DPMO': 0,
+                                                              'Recalls_Pts_Achieved': recalls_pts_achieved,
+                                                                'Recalls_Max_Achieved': recalls_max_achieved,
                                                            'Year': year,
                                                            'Week Completed': week,
                                                            'Date Assigned': date_assigned,
                                                            'Date Completed': date_completed,
                                                            'Error Type': error_type,
                                                            'Feedback': feedback,
-                                                            'Is Biased': "NA",
+                                                            'Is_Biased': "NA",
                                                            'Marketplace': marketplace,
                                                            'QC Parameter Error': qc_parameter_error,
                                                            'Primary RC': primary_rc,
@@ -526,6 +542,9 @@ class QaRecallsFilesManager:
         primary_rc = merged_df_na_private_brands_recalls_mw_compiled['ROOT CAUSE PRIMARY'].fillna("NA")
         secondary_rc = merged_df_na_private_brands_recalls_mw_compiled['ROOT CAUSE SECONDARY'].fillna("NA")
         tertiary_rc = merged_df_na_private_brands_recalls_mw_compiled['ROOT CAUSE TERTIARY'].fillna("NA")
+        recalls_pts_achieved = merged_df_na_private_brands_recalls_mw_compiled['Recall Pts Achieved'].fillna(0).astype(int)  # Recall Pts Achieved: column CO
+        recalls_max_achieved = merged_df_na_private_brands_recalls_mw_compiled['Recall Max Achieved'].fillna(0).astype(int)  # Recall Max Achieved: column CP
+
 
         # Create DataFrame
 
@@ -543,6 +562,8 @@ class QaRecallsFilesManager:
              'False Negative Rate': false_negative_rate,
              'FP DPMO': fp_dpmo,
              'FN DPMO': fn_dpmo,
+                'Recalls_Pts_Achieved': recalls_pts_achieved,
+                'Recalls_Max_Achieved': recalls_max_achieved,
              'Year': year,
              'Week Completed': week,
              'Date Assigned': date_assigned,
