@@ -23,6 +23,9 @@ class QaRecallsFilesManager:
         # Replace commas by semmincolons in dataframe
         merged_df_Latam_recalls_compiled = replace_commas_with_semicolon(merged_df_Latam_recalls_compiled)
 
+        # Replace \n by a space in dataframe
+        merged_df_Latam_recalls_compiled = merged_df_Latam_recalls_compiled.replace('\n', '', regex=True)
+
 
         # Login level: (Y / Z) * 100
         qa_score_percentage_login_level = round((merged_df_Latam_recalls_compiled['Associate Pts Achieved'] /
@@ -129,6 +132,9 @@ class QaRecallsFilesManager:
 
         # Replace commas by semmincolons in dataframe
         merged_df_mw_compiled = replace_commas_with_semicolon(merged_df_mw_compiled)
+
+        # Replace \n by a space in dataframe
+        merged_df_mw_compiled = merged_df_mw_compiled.replace('\n', ' ', regex=True)
 
         # QA Score %: Total points achieved / Total Max Points
         # Login
@@ -252,6 +258,9 @@ class QaRecallsFilesManager:
         # Replace commas by semmincolons in dataframe
         merged_df_global_latam = replace_commas_with_semicolon(merged_df_global_latam)
 
+        # Replace \n by a space in dataframe
+        merged_df_global_latam = merged_df_global_latam.replace(r'\n', ' ', regex=True)
+
         # QA Score %: Total points achieved / Total Max Points
         # Login
         # level: (AA / AB)
@@ -374,6 +383,9 @@ class QaRecallsFilesManager:
         # Replace commas by semmincolons in dataframe
         merged_df_na_latam_non_act = replace_commas_with_semicolon(merged_df_na_latam_non_act)
 
+        # Replace \n by space in dataframe
+        merged_df_na_latam_non_act = merged_df_na_latam_non_act.replace('\n', ' ', regex=True)
+
 
         # QA Score %: Total points achieved / Total Max Points
         # Login
@@ -477,6 +489,9 @@ class QaRecallsFilesManager:
 
         # Replace commas by semmincolons in dataframe
         merged_df_na_private_brands_recalls_mw_compiled = replace_commas_with_semicolon(merged_df_na_private_brands_recalls_mw_compiled)
+
+        # Replace \n by space in dataframe
+        merged_df_na_private_brands_recalls_mw_compiled = merged_df_na_private_brands_recalls_mw_compiled.replace('\n', ' ', regex=True)
 
         # QA Score %: Total points achieved / Total Max Points
         # Login
