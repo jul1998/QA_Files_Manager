@@ -161,6 +161,6 @@ else:
     # upload_to_s3(bucket, results_path + 'Global_Recalls_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'Global_Recalls_Compiled_File_Calculated_Values.csv')
     # upload_to_s3(bucket, results_path + 'NA_LATAM_Non_Actionable_Recalls_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'NA_LATAM_Non_Actionable_Recalls_Compiled_File_Calculated_Values.csv')
     # upload_to_s3(bucket, results_path + 'NA_Private_Brands_Recalls_MW_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'NA_Private_Brands_Recalls_MW_Compiled_File_Calculated_Values.csv')
-    # upload_to_s3(bucket, results_path + 'Union_All_QA_Recalls_Files_calculations.csv', bucket_destionation_path + 'Union_All_QA_Recalls_Files_calculations.csv')
+    upload_to_s3(bucket, results_path + 'Union_All_QA_Recalls_Files_calculations.csv', bucket_destionation_path + 'Union_All_QA_Recalls_Files_calculations.csv')
     #
 
