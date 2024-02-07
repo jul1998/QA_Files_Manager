@@ -95,27 +95,45 @@ qa_recalls_manager_instance = QaRecallsFilesManager()
 
 try:
     # Call function
-    latam_recalls_compiled_calculated_values = qa_recalls_manager_instance.calcs_for_LATAM_LATAM_Recalls_Compiled_File(
-        LATAM_Recalls_Compiled_File_TT_Level, LATAM_Recalls_Compiled_File_Raw_Data_Errors_Root_Cause)
+    latam_recalls_tt_level_compiled_calculated_values = qa_recalls_manager_instance.calcs_for_LATAM_LATAM_Recalls_TT_level_Compiled_File(
+        LATAM_Recalls_Compiled_File_TT_Level)
 
-    mw_compiled_calculated_values = qa_recalls_manager_instance.calcs_for_MW_Compiled_File(
-        MW_Compiled_File_MW_Data, MW_Compiled_File_Raw_Data_Errors_Root_Cause)
+    latam_recalls_compiled_raw_errors_calculated_values = qa_recalls_manager_instance.calcs_for_LATAM_LATAM_Recalls_raw_errors_Compiled_File(
+        LATAM_Recalls_Compiled_File_Raw_Data_Errors_Root_Cause)
 
-    global_latam_calculated_values = qa_recalls_manager_instance.calcs_for_global_latam(
-        Global_Recalls_Compiled_File_LATAM_TT_Level,Global_Recalls_Compiled_File_LATAM_Raw_Data_Errors_Root_Cause)
+    mw_compiled_tt_level_calculated_values = qa_recalls_manager_instance.calcs_for_MW_TT_level_Compiled_File(
+         MW_Compiled_File_MW_Data)
 
-    na_latam_non_act_calculated_values = qa_recalls_manager_instance.calcs_for_na_latam_non_actionable(
-        NA_LATAM_Non_Actionable_Recalls_Compiled_File_TT_Level,
-        NA_LATAM_Non_Actionable_Recalls_Compiled_File_Raw_Data_Errors_Root_Cause)
+    mw_compiled_raw_errors_calculated_values = qa_recalls_manager_instance.calcs_for_MW_raw_errors_Compiled_File(
+        MW_Compiled_File_Raw_Data_Errors_Root_Cause)
 
-    na_private_brands_recalls_mw_compiled_calculated_values = qa_recalls_manager_instance.\
-        calcs_for_na_private_brands_recalls_mw(NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level,
-                                               NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause)
+    global_latam_calculated_values_tt_level = qa_recalls_manager_instance.calcs_for_global_latam_tt_level(
+        Global_Recalls_Compiled_File_LATAM_TT_Level)
 
-    # Union all dataframes into one
-    union_all_dataframes = pd.concat([latam_recalls_compiled_calculated_values, mw_compiled_calculated_values,
-                                        global_latam_calculated_values, na_latam_non_act_calculated_values,
-                                        na_private_brands_recalls_mw_compiled_calculated_values], ignore_index=True)
+    global_latam_calculated_values_raw_errors = qa_recalls_manager_instance.calcs_for_global_latam_raw_errors(
+        Global_Recalls_Compiled_File_LATAM_Raw_Data_Errors_Root_Cause)
+
+    #
+    # global_latam_calculated_values = qa_recalls_manager_instance.calcs_for_global_latam(
+    #     Global_Recalls_Compiled_File_LATAM_TT_Level,Global_Recalls_Compiled_File_LATAM_Raw_Data_Errors_Root_Cause)
+    #
+    # na_latam_non_act_calculated_values = qa_recalls_manager_instance.calcs_for_na_latam_non_actionable(
+    #     NA_LATAM_Non_Actionable_Recalls_Compiled_File_TT_Level,
+    #     NA_LATAM_Non_Actionable_Recalls_Compiled_File_Raw_Data_Errors_Root_Cause)
+    #
+    # na_private_brands_recalls_mw_compiled_calculated_values = qa_recalls_manager_instance.\
+    #     calcs_for_na_private_brands_recalls_mw(NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level,
+    #                                            NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause)
+    #
+    # # Union all dataframes into one
+    union_all_dataframes = pd.concat([latam_recalls_tt_level_compiled_calculated_values,
+                                     latam_recalls_compiled_raw_errors_calculated_values
+                                      , mw_compiled_tt_level_calculated_values
+                                      , mw_compiled_raw_errors_calculated_values
+                                        , global_latam_calculated_values_tt_level
+                                        , global_latam_calculated_values_raw_errors
+                                      ] ,
+                                     ignore_index=True)
 
 
 
@@ -127,20 +145,22 @@ except Exception as e:
 
 else:
     # Save file in results filepath
-    save_csv_file(latam_recalls_compiled_calculated_values, results_path, 'LATAM_Recalls_Compiled_File_Calculated_Values')
-    save_csv_file(mw_compiled_calculated_values, results_path, 'MW_Compiled_File_Calculated_Values')
-    save_csv_file(global_latam_calculated_values, results_path, 'Global_Recalls_Compiled_File_Calculated_Values')
-    save_csv_file(na_latam_non_act_calculated_values, results_path, 'NA_LATAM_Non_Actionable_Recalls_Compiled_File_Calculated_Values')
-    save_csv_file(na_private_brands_recalls_mw_compiled_calculated_values, results_path,
-                  'NA_Private_Brands_Recalls_MW_Compiled_File_Calculated_Values')
+    save_csv_file(latam_recalls_tt_level_compiled_calculated_values, results_path, 'LATAM_Recalls_Compiled_File_Calculated_Values')
+    save_csv_file(latam_recalls_compiled_raw_errors_calculated_values, results_path, 'LATAM_Recalls_Compiled_File_Raw_Data_Errors_Root_Cause_Calculated_Values')
+    save_csv_file(mw_compiled_tt_level_calculated_values, results_path, 'MW_Compiled_File_MW_Data_Calculated_Values')
+    save_csv_file(mw_compiled_raw_errors_calculated_values, results_path, 'MW_Compiled_File_Raw_Data_Errors_Root_Cause_Calculated_Values')
+    # save_csv_file(global_latam_calculated_values, results_path, 'Global_Recalls_Compiled_File_Calculated_Values')
+    # save_csv_file(na_latam_non_act_calculated_values, results_path, 'NA_LATAM_Non_Actionable_Recalls_Compiled_File_Calculated_Values')
+    # save_csv_file(na_private_brands_recalls_mw_compiled_calculated_values, results_path,
+    #               'NA_Private_Brands_Recalls_MW_Compiled_File_Calculated_Values')
     save_csv_file(union_all_dataframes, results_path, 'Union_All_QA_Recalls_Files_calculations')
-
-    # Upload to s3 bucket
-    upload_to_s3(bucket, results_path + 'LATAM_Recalls_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'LATAM_Recalls_Compiled_File_Calculated_Values.csv')
-    upload_to_s3(bucket, results_path + 'MW_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'MW_Compiled_File_Calculated_Values.csv')
-    upload_to_s3(bucket, results_path + 'Global_Recalls_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'Global_Recalls_Compiled_File_Calculated_Values.csv')
-    upload_to_s3(bucket, results_path + 'NA_LATAM_Non_Actionable_Recalls_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'NA_LATAM_Non_Actionable_Recalls_Compiled_File_Calculated_Values.csv')
-    upload_to_s3(bucket, results_path + 'NA_Private_Brands_Recalls_MW_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'NA_Private_Brands_Recalls_MW_Compiled_File_Calculated_Values.csv')
-    upload_to_s3(bucket, results_path + 'Union_All_QA_Recalls_Files_calculations.csv', bucket_destionation_path + 'Union_All_QA_Recalls_Files_calculations.csv')
-
+    #
+    # # Upload to s3 bucket
+    # upload_to_s3(bucket, results_path + 'LATAM_Recalls_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'LATAM_Recalls_Compiled_File_Calculated_Values.csv')
+    # upload_to_s3(bucket, results_path + 'MW_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'MW_Compiled_File_Calculated_Values.csv')
+    # upload_to_s3(bucket, results_path + 'Global_Recalls_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'Global_Recalls_Compiled_File_Calculated_Values.csv')
+    # upload_to_s3(bucket, results_path + 'NA_LATAM_Non_Actionable_Recalls_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'NA_LATAM_Non_Actionable_Recalls_Compiled_File_Calculated_Values.csv')
+    # upload_to_s3(bucket, results_path + 'NA_Private_Brands_Recalls_MW_Compiled_File_Calculated_Values.csv', bucket_destionation_path + 'NA_Private_Brands_Recalls_MW_Compiled_File_Calculated_Values.csv')
+    # upload_to_s3(bucket, results_path + 'Union_All_QA_Recalls_Files_calculations.csv', bucket_destionation_path + 'Union_All_QA_Recalls_Files_calculations.csv')
+    #
 
