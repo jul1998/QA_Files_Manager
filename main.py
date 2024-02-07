@@ -113,6 +113,12 @@ try:
     global_latam_calculated_values_raw_errors = qa_recalls_manager_instance.calcs_for_global_latam_raw_errors(
         Global_Recalls_Compiled_File_LATAM_Raw_Data_Errors_Root_Cause)
 
+    na_latam_non_act_calculated_values_tt_level = qa_recalls_manager_instance.calcs_for_na_latam_non_actionable_tt_level(
+        NA_LATAM_Non_Actionable_Recalls_Compiled_File_TT_Level)
+
+    na_latam_non_act_calculated_values_raw_errors = qa_recalls_manager_instance.calcs_for_na_latam_non_actionable_raw_errors(
+        NA_LATAM_Non_Actionable_Recalls_Compiled_File_Raw_Data_Errors_Root_Cause)
+
     #
     # global_latam_calculated_values = qa_recalls_manager_instance.calcs_for_global_latam(
     #     Global_Recalls_Compiled_File_LATAM_TT_Level,Global_Recalls_Compiled_File_LATAM_Raw_Data_Errors_Root_Cause)
@@ -132,6 +138,8 @@ try:
                                       , mw_compiled_raw_errors_calculated_values
                                         , global_latam_calculated_values_tt_level
                                         , global_latam_calculated_values_raw_errors
+                                        , na_latam_non_act_calculated_values_tt_level
+                                        , na_latam_non_act_calculated_values_raw_errors
                                       ] ,
                                      ignore_index=True)
 
