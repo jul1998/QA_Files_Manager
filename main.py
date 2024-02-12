@@ -119,18 +119,13 @@ try:
     na_latam_non_act_calculated_values_raw_errors = qa_recalls_manager_instance.calcs_for_na_latam_non_actionable_raw_errors(
         NA_LATAM_Non_Actionable_Recalls_Compiled_File_Raw_Data_Errors_Root_Cause)
 
-    #
-    # global_latam_calculated_values = qa_recalls_manager_instance.calcs_for_global_latam(
-    #     Global_Recalls_Compiled_File_LATAM_TT_Level,Global_Recalls_Compiled_File_LATAM_Raw_Data_Errors_Root_Cause)
-    #
-    # na_latam_non_act_calculated_values = qa_recalls_manager_instance.calcs_for_na_latam_non_actionable(
-    #     NA_LATAM_Non_Actionable_Recalls_Compiled_File_TT_Level,
-    #     NA_LATAM_Non_Actionable_Recalls_Compiled_File_Raw_Data_Errors_Root_Cause)
-    #
-    # na_private_brands_recalls_mw_compiled_calculated_values = qa_recalls_manager_instance.\
-    #     calcs_for_na_private_brands_recalls_mw(NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level,
-    #                                            NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause)
-    #
+    na_private_brands_recalls_mw_compiled_calculated_values_tt_level = qa_recalls_manager_instance.\
+        calcs_for_na_private_brands_recalls_mw_tt_level(NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level)
+
+    na_private_brands_recalls_mw_compiled_calculated_values_raw_errors = qa_recalls_manager_instance.\
+        calcs_for_na_private_brands_recalls_mw_raw_errors(NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause)
+
+
     # # Union all dataframes into one
     union_all_dataframes = pd.concat([latam_recalls_tt_level_compiled_calculated_values,
                                      latam_recalls_compiled_raw_errors_calculated_values
@@ -140,6 +135,8 @@ try:
                                         , global_latam_calculated_values_raw_errors
                                         , na_latam_non_act_calculated_values_tt_level
                                         , na_latam_non_act_calculated_values_raw_errors
+                                        , na_private_brands_recalls_mw_compiled_calculated_values_tt_level
+                                        , na_private_brands_recalls_mw_compiled_calculated_values_raw_errors
                                       ] ,
                                      ignore_index=True)
 

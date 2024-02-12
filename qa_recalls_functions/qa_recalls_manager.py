@@ -706,55 +706,48 @@ class QaRecallsFilesManager:
 
 
 
-    def calcs_for_na_private_brands_recalls_mw(self, NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level,
-                                               NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause):
-        # Convert 'TT URL' column to string type
-        NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['TT URL'] = \
-            NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['TT URL'].astype(str)
+    def calcs_for_na_private_brands_recalls_mw_tt_level(self, NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level):
 
-        # Fill NaN values with a placeholder string
-        NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['TT URL'].fillna('NA', inplace=True)
-
-        # Merge the DataFrames
-        merged_df_na_private_brands_recalls_mw_compiled = pd.merge(
-            NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level,
-            NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause,
-            how='left',
-            on='TT URL'
-        )
+        # # Merge the DataFrames
+        # merged_df_na_private_brands_recalls_mw_compiled = pd.merge(
+        #     NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level,
+        #     NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause,
+        #     how='left',
+        #     on='TT URL'
+        # )
 
 
         # Reset NaN values to None
-        merged_df_na_private_brands_recalls_mw_compiled['TT URL'].replace('NA', None, inplace=True)
+        NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level['TT URL'].replace('NA', None, inplace=True)
 
         # select data only where year is >= 2023
-        merged_df_na_private_brands_recalls_mw_compiled = merged_df_na_private_brands_recalls_mw_compiled[
-            merged_df_na_private_brands_recalls_mw_compiled['Year'] >= 2023]
+        NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level = NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level[
+            NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level['Year'] >= 2023]
 
         # Replace commas by semmincolons in dataframe
-        merged_df_na_private_brands_recalls_mw_compiled = replace_commas_with_semicolon(merged_df_na_private_brands_recalls_mw_compiled)
+        NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level = replace_commas_with_semicolon(NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level)
 
         # Replace \n by space in dataframe
-        merged_df_na_private_brands_recalls_mw_compiled = merged_df_na_private_brands_recalls_mw_compiled.replace('\n', ' ', regex=True)
+        NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level = NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level.replace('\n', ' ', regex=True)
 
         # QA Score %: Total points achieved / Total Max Points
         # Login
         # level:  (X / Y)
         qa_score_percentage_login_level = round(
-            (merged_df_na_private_brands_recalls_mw_compiled['Associate Pts Achieved'] /
-             merged_df_na_private_brands_recalls_mw_compiled['Associate Max Achieved']) * 100, 2).fillna(0).astype(int)
+            (NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level['Associate Pts Achieved'] /
+             NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level['Associate Max Achieved']) * 100, 2).fillna(0).astype(int)
 
         # DPMO: (1-QA Score%)*10^6
         dpmo = round((1 - qa_score_percentage_login_level / 100) * 1000000)
 
         # Columns from compiled> (AD)
-        tp_asins = merged_df_na_private_brands_recalls_mw_compiled['Yanked'].fillna(0).astype(int)
+        tp_asins = NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level['Yanked'].fillna(0).astype(int)
 
         # FP: column AG
-        false_positive_asins = merged_df_na_private_brands_recalls_mw_compiled['Associate Level Overpulls'].fillna(0).astype(int)
+        false_positive_asins = NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level['Associate Level Overpulls'].fillna(0).astype(int)
 
         # FN: column AF
-        false_negative_asins = merged_df_na_private_brands_recalls_mw_compiled['Associate Level Underpulls'].fillna(0).astype(int)
+        false_negative_asins = NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level['Associate Level Underpulls'].fillna(0).astype(int)
 
         # True Positive ASINs + False Positive ASINs (AG + AI)
         audit_sample = (tp_asins + false_positive_asins).fillna(0).astype(int)
@@ -787,54 +780,117 @@ class QaRecallsFilesManager:
         Tertiary RC: column N
         """
 
-        associate_na_private_brands_recalls_mw_tt_level = merged_df_na_private_brands_recalls_mw_compiled[
-            'Specialist_x'].fillna("NA")
-        tt_url_na_latam_non_act_tt_level = merged_df_na_private_brands_recalls_mw_compiled['TT URL'].fillna("NA")
-        year = merged_df_na_private_brands_recalls_mw_compiled['Year'].fillna(pd.NaT)
-        week = merged_df_na_private_brands_recalls_mw_compiled['Completed Week_x'].fillna(pd.NaT)
-        date_assigned = pd.to_datetime(merged_df_na_private_brands_recalls_mw_compiled['Date Assigned']).fillna(pd.to_datetime('1900-01-01'))
-        date_completed = pd.to_datetime(merged_df_na_private_brands_recalls_mw_compiled['Date Completed_x']).fillna(pd.to_datetime('1900-01-01'))
-        error_type = merged_df_na_private_brands_recalls_mw_compiled['Type of Error'].fillna("NA")
-        feedback = merged_df_na_private_brands_recalls_mw_compiled['Feedback'].fillna("NA")
-        marketplace = merged_df_na_private_brands_recalls_mw_compiled['MP_x'].fillna("NA")
-        qc_parameter_error = merged_df_na_private_brands_recalls_mw_compiled['QC Parameter Error'].fillna("NA")
-        primary_rc = merged_df_na_private_brands_recalls_mw_compiled['ROOT CAUSE PRIMARY'].fillna("NA")
-        secondary_rc = merged_df_na_private_brands_recalls_mw_compiled['ROOT CAUSE SECONDARY'].fillna("NA")
-        tertiary_rc = merged_df_na_private_brands_recalls_mw_compiled['ROOT CAUSE TERTIARY'].fillna("NA")
-        recalls_pts_achieved = merged_df_na_private_brands_recalls_mw_compiled['Recall Pts Achieved'].fillna(0).astype(int)  # Recall Pts Achieved: column CO
-        recalls_max_achieved = merged_df_na_private_brands_recalls_mw_compiled['Recall Max Achieved'].fillna(0).astype(int)  # Recall Max Achieved: column CP
+        associate_na_private_brands_recalls_mw_tt_level = NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level[
+            'Specialist'].fillna("NA")
+        tt_url_na_latam_non_act_tt_level = NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level['TT URL'].fillna("NA")
+
+        date_assigned = pd.to_datetime(NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level['Date Assigned']).dt.date.fillna(
+            pd.to_datetime('1900-01-01').date())
+        date_completed = pd.to_datetime(NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level['Date Completed']).dt.date.fillna(
+            pd.to_datetime('1900-01-01').date())
+
+        marketplace = NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level['MP'].fillna("NA")
+        feedback = NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level['Feedback'].fillna("NA")
+        recalls_pts_achieved = NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level['Recall Pts Achieved'].fillna(0).astype(int)  # Recall Pts Achieved: column CO
+        recalls_max_achieved = NA_Private_Brands_Recalls_MW_Compiled_File_TT_Level['Recall Max Achieved'].fillna(0).astype(int)  # Recall Max Achieved: column CP
 
 
         # Create DataFrame
 
-        na_private_brands_recalls_mw_compiled_calculated_values = pd.DataFrame(
-            {'Source': 'NA Private Brands Recalls MW Compiled',
-             'TT_URL_TT_Level': tt_url_na_latam_non_act_tt_level,
-             'Specialist_TT_Level': associate_na_private_brands_recalls_mw_tt_level,
-             'QA Score %': qa_score_percentage_login_level,
-             'DPMO': dpmo,
-             'TP ASINs': tp_asins,
-             'False Positive ASINs': false_positive_asins,
-             'False Negative ASINs': false_negative_asins,
-             'Audit Sample': audit_sample,
-             'False Positive Rate': false_positive_rate,
-             'False Negative Rate': false_negative_rate,
-             'FP DPMO': fp_dpmo,
-             'FN DPMO': fn_dpmo,
-                'Recalls_Pts_Achieved': recalls_pts_achieved,
-                'Recalls_Max_Achieved': recalls_max_achieved,
-             'Year': year,
-             'Week Completed': week,
-             'Date Assigned': date_assigned,
-             'Date Completed': date_completed,
-             'Error Type': error_type,
+        na_private_brands_recalls_mw_compiled_calculated_values_tt_level = pd.DataFrame(
+            {'Source': 'NA Private Brands Recalls MW TT Level Compiled',
+             'TT_URL': tt_url_na_latam_non_act_tt_level,
+             'Specialist': associate_na_private_brands_recalls_mw_tt_level,
+             'Marketplace': marketplace,
              'Feedback': feedback,
              'Is_Biased': "NA",
+             'Date_Assigned': date_assigned,
+             'Date_Completed': date_completed,
+             'QA_Score_%': qa_score_percentage_login_level,
+             'DPMO': dpmo,
+             'TP_ASINs': tp_asins,
+             'False_Positive_ASINs': false_positive_asins,
+             'False_Negative_ASINs': false_negative_asins,
+             'Audit_Sample': audit_sample,
+             'False_Positive_Rate': false_positive_rate,
+             'False_Negative_Rate': false_negative_rate,
+             'FP_DPMO': fp_dpmo,
+             'FN_DPMO': fn_dpmo,
+             'Recalls_Pts_Achieved': recalls_pts_achieved,
+             'Recalls_Max_Achieved': recalls_max_achieved,
+             'Error Type': "NA",
+             'QC Parameter Error': "NA",
+             'Primary RC': "NA",
+             'Secondary RC': "NA",
+             'Tertiary RC': "NA"
+             })
+
+        return na_private_brands_recalls_mw_compiled_calculated_values_tt_level
+
+    def calcs_for_na_private_brands_recalls_mw_raw_errors(self,NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause):
+
+        # Create year column
+        NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['Year'] = pd.to_datetime(
+            NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['Date Completed']).dt.year
+
+        # Convert 'TT URL' column to string type
+        NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['TT URL'] = \
+            NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['TT URL'].astype(str)
+
+        # Fill NaN values with a placeholder string
+        NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['TT URL'].fillna('NA', inplace=True)
+
+
+        # Reset NaN values to None
+        NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['TT URL'].replace('NA', None, inplace=True)
+
+        # select data only where year is >= 2023
+        NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause = NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause[
+            NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['Year'] >= 2023]
+
+        # Replace commas by semmincolons in dataframe
+        NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause = replace_commas_with_semicolon(NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause)
+
+        # Replace \n by space in dataframe
+        NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause = NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause.replace('\n', ' ', regex=True)
+
+        tt_url = NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['TT URL'].fillna("NA")
+        specialist = NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['Specialist'].fillna("NA")
+        marketplace = NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['MP'].fillna("NA")
+        error_type = NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['Type of Error'].fillna("NA")
+        date_completed = pd.to_datetime(NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['Date Completed']).dt.date.fillna(
+            pd.to_datetime('1900-01-01').date())
+        qc_parameter_error = NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['QC Parameter Error'].fillna("NA")
+        primary_rc = NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['ROOT CAUSE PRIMARY'].fillna("NA")
+        secondary_rc = NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['ROOT CAUSE SECONDARY'].fillna("NA")
+        tertiary_rc = NA_Private_Brands_Recalls_MW_Compiled_File_Raw_Data_Errors_Root_Cause['ROOT CAUSE TERTIARY'].fillna("NA")
+
+        na_private_brands_recalls_mw_compiled_calculated_values_tt_level = pd.DataFrame(
+            {'Source': 'NA Private Brands Recalls MW raw_errors Compiled',
+             'TT_URL': tt_url,
+             'Specialist': specialist,
              'Marketplace': marketplace,
+             'Feedback': "NA",
+             'Is_Biased': "NA",
+             'Date_Assigned': pd.to_datetime(
+                 '1900-01-01').date(),
+             'Date_Completed': date_completed,
+             'QA_Score_%': 0.0,
+             'DPMO': 0.0,
+             'TP_ASINs': 0,
+             'False_Positive_ASINs': 0,
+             'False_Negative_ASINs': 0,
+             'Audit_Sample': 0,
+             'False_Positive_Rate': 0.0,
+             'False_Negative_Rate': 0.0,
+             'FP_DPMO': 0.0,
+             'FN_DPMO': 0.0,
+             'Recalls_Pts_Achieved': 0,
+             'Recalls_Max_Achieved': 0,
+             'Error Type': error_type,
              'QC Parameter Error': qc_parameter_error,
              'Primary RC': primary_rc,
              'Secondary RC': secondary_rc,
              'Tertiary RC': tertiary_rc
              })
 
-        return na_private_brands_recalls_mw_compiled_calculated_values
