@@ -154,7 +154,8 @@ else:
     save_csv_file(latam_recalls_compiled_raw_errors_calculated_values, results_path, 'LATAM_Recalls_Compiled_File_Raw_Data_Errors_Root_Cause_Calculated_Values')
     save_csv_file(mw_compiled_tt_level_calculated_values, results_path, 'MW_Compiled_File_MW_Data_Calculated_Values')
     save_csv_file(mw_compiled_raw_errors_calculated_values, results_path, 'MW_Compiled_File_Raw_Data_Errors_Root_Cause_Calculated_Values')
-    # save_csv_file(global_latam_calculated_values, results_path, 'Global_Recalls_Compiled_File_Calculated_Values')
+    save_csv_file(global_latam_calculated_values_tt_level, results_path, 'Global_Recalls_Compiled_File_LATAM_TT_Level_Calculated_Values')
+    save_csv_file(global_latam_calculated_values_raw_errors, results_path, 'Global_Recalls_Compiled_File_LATAM_Raw_Data_Errors_Root_Cause_Calculated_Values')
     # save_csv_file(na_latam_non_act_calculated_values, results_path, 'NA_LATAM_Non_Actionable_Recalls_Compiled_File_Calculated_Values')
     # save_csv_file(na_private_brands_recalls_mw_compiled_calculated_values, results_path,
     #               'NA_Private_Brands_Recalls_MW_Compiled_File_Calculated_Values')

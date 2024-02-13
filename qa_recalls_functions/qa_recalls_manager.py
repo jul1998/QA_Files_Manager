@@ -515,6 +515,7 @@ class QaRecallsFilesManager:
         tt_url_raw_errors = Global_Recalls_Compiled_File_LATAM_Raw_Data_Errors_Root_Cause['TT URL'].fillna("NA")
         specialist_raw_errors = Global_Recalls_Compiled_File_LATAM_Raw_Data_Errors_Root_Cause['Specialist'].fillna("NA")
         marketplace_raw_errors = Global_Recalls_Compiled_File_LATAM_Raw_Data_Errors_Root_Cause['MP'].fillna("NA")
+        is_biased = Global_Recalls_Compiled_File_LATAM_Raw_Data_Errors_Root_Cause['Unbiased/Biased'].fillna("NA")
         date_completed = pd.to_datetime(Global_Recalls_Compiled_File_LATAM_Raw_Data_Errors_Root_Cause['Date Completed']).dt.date.fillna(
             pd.to_datetime('1900-01-01').date())
         error_type = Global_Recalls_Compiled_File_LATAM_Raw_Data_Errors_Root_Cause['Type of Error'].fillna("NA")
@@ -530,7 +531,7 @@ class QaRecallsFilesManager:
                                                                  'Specialist': specialist_raw_errors,
                                                                  'Marketplace': marketplace_raw_errors,
                                                                  'Feedback': "NA",
-                                                                 'Is_Biased': "NA",
+                                                                 'Is_Biased': is_biased,
                                                                  'Date_Assigned': pd.to_datetime('1900-01-01').date(),
                                                                  'Date_Completed': date_completed,
                                                                   'QA_Score_%': 0.0,
