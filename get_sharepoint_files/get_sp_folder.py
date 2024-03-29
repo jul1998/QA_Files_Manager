@@ -10,7 +10,7 @@ from clean_upload_data import replace_commas_with_semicolon
 
 load_dotenv() # Load environment variables
 
-FOLDER = os.getenv("FOLDER") # Get environment variables
+#FOLDER = os.getenv("FOLDER") # Get environment variables
 
 
 # username and password
@@ -19,7 +19,7 @@ def get_username():
     password = None  # password is not needed as Windows credentials will be used
     return username, password
 
-def get_sharepoint_folder(username, password, site_url):
+def get_sharepoint_folder(username, password, site_url, FOLDER):
     # Specify the document library or folder and file name
     auth = HttpNtlmAuth(username, password)
     site = Site(site_url, version=Version.v2016, auth=auth, verify_ssl=False)

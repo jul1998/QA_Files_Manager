@@ -1,1 +1,2 @@
 from .qa_recalls_manager import QaRecallsFilesManager
+from .recalls_qa_files_main import run_recalls_qa_manager
