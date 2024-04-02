@@ -17,7 +17,7 @@ site_url = "https://share.amazon.com/sites/RE-Investigations, Scrubs and Reinsta
 
 # S3 required data
 bucket = 'quicksigth-dashboards'
-bucket_destionation_path = os.getenv('BUKET_DESTINATION_PATH')
+bucket_destionation_path = os.getenv('BUKET_DESTINATION_PATH_ACH')
 
 #Get the folder object
 folder_url = os.getenv('FOLDER_PATH_ACH')
