@@ -37,7 +37,6 @@ def run_ach_qa_manager():
 
     Year_df = RE_Investigations_Scrubs_and_Reinstatement_Metric_data_Reinstatetment_DPMO['Year']
     Quarter_df = RE_Investigations_Scrubs_and_Reinstatement_Metric_data_Reinstatetment_DPMO['Quarter']
-    mon_num_df = RE_Investigations_Scrubs_and_Reinstatement_Metric_data_Reinstatetment_DPMO['mon_num']
     Month_df = RE_Investigations_Scrubs_and_Reinstatement_Metric_data_Reinstatetment_DPMO['Month']
     Week_No_df = RE_Investigations_Scrubs_and_Reinstatement_Metric_data_Reinstatetment_DPMO['Week No']
     MP_df = RE_Investigations_Scrubs_and_Reinstatement_Metric_data_Reinstatetment_DPMO['MP']
@@ -56,7 +55,7 @@ def run_ach_qa_manager():
 
 
     # Create a new dataframe with the new columns
-    new_df = pd.DataFrame({'Year': Year_df, 'Quarter': Quarter_df, 'mon_num': mon_num_df, 'Month': Month_df,
+    new_df = pd.DataFrame({'Year': Year_df, 'Quarter': Quarter_df, 'Month': Month_df,
                               'Week No': Week_No_df, 'MP': MP_df, 'SIM or TT': SIM_or_TT_df, 'Error Parameter': Error_Parameter_df,
                                 'Error parameter score': Error_Parameter_Score_df, 'Points achieved': Points_Achieved_df,
                                 'Max points': Max_Points_df, 'Reviewer': Reviewer_df,
